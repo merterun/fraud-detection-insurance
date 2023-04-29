@@ -46,25 +46,6 @@ summary(nfraud)
 dim(nfraud)
 
 # Create new data frames for each variable
-#for (col_name in names(fraud)) {
-  col_unique <- unique(fraud[[col_name]])
-  col_df <- data.frame(
-    variable = col_unique,
-    index = rep(NA, length(col_unique))
-  )
-  for (i in 1:length(col_unique)) {
-    # Get the corresponding index value from nfraud
-    index_val <- nfraud[fraud[[col_name]] == col_unique[i], col_name]
-    col_df[i, "index"] <- index_val[1]
-  }
-  colnames(col_df)[1] <- col_name
-  assign(col_name, col_df)
-}
-
-
-
-
-
 for (col_name in names(fraud)) {
   if (!is.numeric(fraud[[col_name]])) {
     col_unique <- unique(fraud[[col_name]])
@@ -81,3 +62,24 @@ for (col_name in names(fraud)) {
     assign(col_name, col_df)
   }
 }
+
+
+
+#Feature scaling:
+# Normalize the features
+nfraud_norm <- apply(nfraud, 2, function(x) (x - min(x)) / (max(x) - min(x)))
+
+
+#Handling imbalanced classes:
+#install.packages("ROSE")
+library(ROSE)
+
+# Oversample the minority class using ROSE
+nfraud_oversampled <- ROSE(FraudFound_P ~ ., data = nfraud, seed = 123)$data
+
+
+
+# Handling categorical variables:
+library(caret)
+fraud_encoded <- predict(dummyVars(FraudFound_P ~ ., data = fraud), newdata = fraud)
+
