@@ -53,6 +53,8 @@ vehicle_age <- ggplot(fraud, aes(x = VehiclePrice, y = AgeOfVehicle)) +
   labs(x = "Vehicle Price", y = "Age of Vehicle") +
   theme(plot.title = element_text(size = 18))
 
+install.packages("gridExtra")
+library(gridExtra)
 grid.arrange(totalclaims_fraud, fraud_pie, age_dist, vehicle_age, ncol = 2)
 
 
