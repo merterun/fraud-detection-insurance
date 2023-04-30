@@ -1,6 +1,6 @@
 # Steps of the project: <br>
 - Data Preparation<br>
-- DEDA<br>
+- EDA<br>
 - DCorrelation Analysis<br>
 - DModel Building, Evaluation and Comparison<br>
 - DHyperparameter Tuning<br>
