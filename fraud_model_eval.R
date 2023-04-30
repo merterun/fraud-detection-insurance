@@ -21,7 +21,7 @@ library(xgboost)
 
 
 #library(usethis) 
-#usethis::edit_r_environ() # R_MAX_VSIZE=100Gb 
+#usethis::edit_r_environ() # R_MAX_VSIZE=3Gb 
 
 # Train a random forest model
 rf_model <- train(FraudFound_P ~ ., data = train, method = "rf", trControl = trainControl(method = "cv", number = 5))
@@ -31,6 +31,7 @@ rf_model
 # Train an XGBoost model
 xgb_model <- train(FraudFound_P ~ ., data = train, method = "xgbTree", trControl = trainControl(method = "cv", number = 5))
 xgb_model
+
 
 
 #library(mlr)
