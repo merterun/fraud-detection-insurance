@@ -16,12 +16,12 @@ test$FraudFound_P <- as.factor(test$FraudFound_P)
 library(randomForest)
 library(xgboost)
 
-gc()
-sessionInfo()
+#gc()
+#sessionInfo()
 
 
-library(usethis) 
-usethis::edit_r_environ() # R_MAX_VSIZE=100Gb 
+#library(usethis) 
+#usethis::edit_r_environ() # R_MAX_VSIZE=100Gb 
 
 # Train a random forest model
 rf_model <- train(FraudFound_P ~ ., data = train, method = "rf", trControl = trainControl(method = "cv", number = 5))
@@ -32,9 +32,6 @@ rf_model
 xgb_model <- train(FraudFound_P ~ ., data = train, method = "xgbTree", trControl = trainControl(method = "cv", number = 5))
 xgb_model
 
-#After training the model, you can evaluate its performance on the test set using metrics like accuracy, 
-#precision, recall, and F1-score. You can also generate a confusion matrix to see the number of true positives, 
-#true negatives, false positives, and false negatives.
 
 #library(mlr)
 #library(mlrCPO)
@@ -44,11 +41,14 @@ library(mlr3)
 train$FraudFound_P <- factor(train$FraudFound_P)
 test$FraudFound_P <- factor(test$FraudFound_P, levels = levels(train$FraudFound_P))
 
-
 # Predict on test set
-rf_pred <- predict(rf_model, newdata = test) # returns a numerical vector
+rf_pred <- as.numeric(predict(rf_model, newdata = test))  # returns a numerical vector
+#rf_pred <- predict(rf_model, newdata = test) # returns a numerical vector
+
 rf_pred_binary <- ifelse(rf_pred > 0.5, "1", "0") # convert to binary factor with 2 levels
+#rf_pred_binary <- ifelse(rf_pred > 0.5, 1, 0) # convert to binary vector with 2 levels
 rf_pred_factor <- factor(rf_pred_binary, levels = levels(test$FraudFound_P))
+
 
 xgb_pred <- predict(xgb_model, newdata = test)
 
@@ -62,7 +62,7 @@ rf_perf$overall
 xgb_perf$overall
 
 
-#You can also generate a ROC curve and calculate the AUC score to evaluate the model's performance.
+#Generate a ROC curve and calculate the AUC score to evaluate the model's performance.
 library(pROC)
 
 
@@ -105,10 +105,6 @@ ggplot(bar_data, aes(x = metric_names, y = metric_values)) +
   geom_text(aes(label = round(metric_values, 2)), vjust = -0.5)
 
 
-
-#Based on the evaluation metrics, you can choose the best performing model and fine-tune 
-#its hyperparameters further to improve its performance.
-
 # Create confusion matrix
 rf_cm <- table(rf_pred_factor, test$FraudFound_P)
 rf_cm
@@ -127,11 +123,13 @@ cat(paste("Recall:", rf_recall, "\n"))         # Print recall
 cat(paste("F1 Score:", rf_f1score, "\n"))      # Print F1-score
 
 
-rf_cm <- confusionMatrix(rf_pred_factor, test$FraudFound_P)    # Create confusion matrix using confusionMatrix function from caret package
-rf_cm_table <- as.matrix(rf_cm$table)                         # Convert table from confusionMatrix into a matrix
-rf_cm_df <- data.frame(Predicted = c(0, 1), Actual = c(0, 1), Count = c(rf_cm_table[1,1], rf_cm_table[2,1], rf_cm_table[1,2], rf_cm_table[2,2]))  # Create data frame for plotting the confusion matrix
+rf_cmv2 <- confusionMatrix(rf_pred_factor, test$FraudFound_P)    # Create confusion matrix using confusionMatrix function from caret package
+rf_cmv2
+rf_cmv2_table <- as.matrix(rf_cmv2$table)                         # Convert table from confusionMatrix into a matrix
+rf_cmv2_df <- data.frame(Predicted = c(0, 1), Actual = c(0, 1), Count = c(rf_cmv2_table[1,1], rf_cmv2_table[2,1], rf_cmv2_table[1,2], rf_cmv2_table[2,2]))  # Create data frame for plotting the confusion matrix
 
-ggplot(rf_cm_df, aes(x = Predicted, y = Actual, fill = as.numeric(Count))) +   # Create plot using ggplot2 package
+
+ggplot(rf_cmv2_df, aes(x = Predicted, y = Actual, fill = as.numeric(Count))) +   # Create plot using ggplot2 package
   geom_tile() +                     # Add a tiled representation of the data
   scale_fill_gradient(low = "white", high = "steelblue", limits = c(0, max(rf_cm_df$Count, na.rm = TRUE))) +  # Color tiles using gradient scale
   geom_text(aes(label = Count), size = 10) +     # Add text labels to the tiles
