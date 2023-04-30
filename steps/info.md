@@ -1,7 +1,7 @@
-Steps of the project: 
-Data Preparation
-EDA
-Correlation Analysis
-Model Building, Evaluation and Comparison
-Hyperparameter Tuning
-Feature Importance Analysis
+# Steps of the project: <br>
+- Data Preparation<br>
+- DEDA<br>
+- DCorrelation Analysis<br>
+- DModel Building, Evaluation and Comparison<br>
+- DHyperparameter Tuning<br>
+- DFeature Importance Analysis<br>
