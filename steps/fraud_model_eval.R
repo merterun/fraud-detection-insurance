@@ -8,7 +8,6 @@ train$FraudFound_P <- as.factor(train$FraudFound_P)
 test$FraudFound_P <- as.factor(test$FraudFound_P)
 
 
-
 library(randomForest)
 library(xgboost)
 
@@ -30,8 +29,7 @@ xgb_model
 
 
 
-#library(mlr)
-#library(mlrCPO)
+library(mlr)
 library(mlr3)
 
 
@@ -121,15 +119,3 @@ cat(paste("F1 Score:", rf_f1score, "\n"))      # Print F1-score
 
 rf_cmv2 <- confusionMatrix(rf_pred_factor, test$FraudFound_P)    # Create confusion matrix using confusionMatrix function from caret package
 rf_cmv2
-rf_cmv2_table <- as.matrix(rf_cmv2$table)                         # Convert table from confusionMatrix into a matrix
-rf_cmv2_df <- data.frame(Predicted = c(0, 1), Actual = c(0, 1), Count = c(rf_cmv2_table[1,1], rf_cmv2_table[2,1], rf_cmv2_table[1,2], rf_cmv2_table[2,2]))  # Create data frame for plotting the confusion matrix
-
-
-
-importance_matrix <- xgb.importance(model = xgb_model$finalModel)
-
-head(importance_matrix)
-
-xgb.plot.importance(importance_matrix)
-
-
