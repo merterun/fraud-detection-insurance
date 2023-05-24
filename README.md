@@ -1,3 +1,3 @@
-Analysis of Fraud Detection on Vehicle Insurance Claims
+#### Analysis of Fraud Detection on Vehicle Insurance Claims
 
 In this project i investigated vehicle insurance claims, differentiating between fraudulent and legitimate ones. The primary objective is to construct a robust model capable of identifying fraudulent claims based on the available data. I employed various techniques including ```Feature Scaling``` to ensure optimal data preprocessing, Model Evaluation, and Comparison utilizing ```xgboost``` and ```Random Forest``` algorithms. Furthermore, i employed ```Hyperparameter Tuning``` to fine-tune the models for enhanced performance and accuracy.
